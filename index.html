@@ -33,10 +33,19 @@
   .ending .body { font-size: 16px; line-height: 2.1; color: #bfb7a9; white-space: pre-line; text-align: left; }
   .restart { margin-top: 40px; background: none; border: 1px solid #3a342a; color: #6f6658; padding: 10px 24px; border-radius: 6px; cursor: pointer; font-family: inherit; font-size: 13px; letter-spacing: 2px; }
   .restart:hover { border-color: #8a7a5e; color: #bfb7a9; }
+  .bgm-btn {
+    position: fixed; top: 16px; right: 16px;
+    width: 38px; height: 38px; border-radius: 50%;
+    background: transparent; border: 1px solid #3a342a; color: #6f6658;
+    font-size: 16px; cursor: pointer; z-index: 10;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .bgm-btn:hover { border-color: #8a7a5e; color: #bfb7a9; }
 </style>
 </head>
 <body>
 <div class="stage" id="stage"></div>
+<button class="bgm-btn" id="bgmBtn" title="背景音乐">🔇</button>
 <script>
 const scores = { 沈宁:0, 夏晴:0, 小安:0 };
 
@@ -323,6 +332,51 @@ function ending(){
   stage.onclick = null;
   stage.querySelector('.restart').onclick = () => location.reload();
 }
+
+// ===== 阴翳 BGM（Web Audio 合成）=====
+let bgmCtx = null, bgmOn = false, bgmMaster = null, bgmStep = 0;
+const bgmNotes = [220.00, 261.63, 329.63, 440.00, 329.63, 261.63];
+
+function bgmNote(freq, when, dur){
+  const o = bgmCtx.createOscillator(); o.type = 'sine'; o.frequency.value = freq;
+  const g = bgmCtx.createGain();
+  g.gain.setValueAtTime(0.0001, when);
+  g.gain.exponentialRampToValueAtTime(0.22, when + 0.05);
+  g.gain.exponentialRampToValueAtTime(0.0001, when + dur);
+  o.connect(g); g.connect(bgmMaster); o.start(when); o.stop(when + dur + 0.05);
+  const o2 = bgmCtx.createOscillator(); o2.type = 'triangle'; o2.frequency.value = freq * 0.5;
+  const g2 = bgmCtx.createGain();
+  g2.gain.setValueAtTime(0.0001, when);
+  g2.gain.exponentialRampToValueAtTime(0.10, when + 0.05);
+  g2.gain.exponentialRampToValueAtTime(0.0001, when + dur * 0.6);
+  o2.connect(g2); g2.connect(bgmMaster); o2.start(when); o2.stop(when + dur * 0.6 + 0.05);
+}
+function bgmSchedule(){
+  if(!bgmOn || !bgmCtx) return;
+  bgmNote(bgmNotes[bgmStep % bgmNotes.length], bgmCtx.currentTime + 0.05, 1.8);
+  bgmStep++;
+  setTimeout(bgmSchedule, 1800);
+}
+function startBGM(){
+  if(bgmCtx){ if(!bgmOn){ bgmMaster.gain.value = 0.4; bgmOn = true; bgmSchedule(); } return; }
+  bgmCtx = new (window.AudioContext || window.webkitAudioContext)();
+  bgmMaster = bgmCtx.createGain(); bgmMaster.gain.value = 0.4; bgmMaster.connect(bgmCtx.destination);
+  const d1 = bgmCtx.createOscillator(); d1.type = 'sine'; d1.frequency.value = 110;
+  const gd1 = bgmCtx.createGain(); gd1.gain.value = 0.05;
+  d1.connect(gd1); gd1.connect(bgmMaster); d1.start();
+  const d2 = bgmCtx.createOscillator(); d2.type = 'sine'; d2.frequency.value = 164.81;
+  const gd2 = bgmCtx.createGain(); gd2.gain.value = 0.03;
+  d2.connect(gd2); gd2.connect(bgmMaster); d2.start();
+  bgmOn = true; bgmSchedule();
+}
+function toggleBGM(){
+  if(!bgmCtx){ startBGM(); }
+  else if(bgmOn){ bgmMaster.gain.value = 0; bgmOn = false; }
+  else { bgmMaster.gain.value = 0.4; bgmOn = true; bgmSchedule(); }
+  document.getElementById('bgmBtn').textContent = bgmOn ? '🔊' : '🔇';
+}
+document.getElementById('bgmBtn').addEventListener('click', function(e){ e.stopPropagation(); toggleBGM(); });
+document.addEventListener('click', function once(){ if(!bgmOn) startBGM(); document.removeEventListener('click', once); });
 
 render();
 </script>
