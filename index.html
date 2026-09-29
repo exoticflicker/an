@@ -41,11 +41,86 @@
     display: flex; align-items: center; justify-content: center;
   }
   .bgm-btn:hover { border-color: #8a7a5e; color: #bfb7a9; }
+
+  /* ===== 封面（预告片） ===== */
+  #cover { position: fixed; inset: 0; z-index: 6; overflow-y: auto; background: #14110d; }
+  #cover main { position: relative; z-index: 5; max-width: 680px; margin: 0 auto; padding: 0 24px; }
+  #cover .grain { position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: .045; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  #cover .vignette { position: fixed; inset: 0; z-index: 3; pointer-events: none; background: radial-gradient(ellipse at 50% 42%, transparent 0%, transparent 55%, rgba(10,8,6,.55) 100%); }
+  #cover #rain { position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: .5; }
+  #cover .hero { min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 56px; }
+  #cover .eyebrow { font-size: 13px; letter-spacing: .35em; color: #5d5549; margin-bottom: 28px; }
+  #cover .hero h1 { font-size: clamp(88px, 22vw, 160px); font-weight: 900; letter-spacing: -.02em; line-height: .95; color: #d9d1c3; }
+  #cover .sub { margin-top: 30px; max-width: 480px; font-size: 16px; line-height: 1.9; color: #8a8071; font-weight: 300; }
+  #cover .sub em { color: #c9a06a; font-style: normal; }
+  #cover .mantra { padding: 76px 0; border-top: 1px solid rgba(217,209,195,.08); }
+  #cover .mantra .q { font-size: clamp(26px, 5vw, 44px); font-weight: 700; line-height: 1.4; }
+  #cover .mantra .q .qmark { color: #c9a06a; }
+  #cover .cast { border-top: 1px solid rgba(217,209,195,.08); }
+  #cover .cast-row { padding: 34px 0; border-bottom: 1px solid rgba(217,209,195,.08); }
+  #cover .cast-row .who { font-size: 26px; font-weight: 900; }
+  #cover .cast-row .who .t { font-size: .5em; font-weight: 300; color: #c9a06a; letter-spacing: .08em; margin-left: 8px; }
+  #cover .cast-row .evi { margin-top: 8px; font-size: 15px; line-height: 2; color: #8a8071; font-weight: 300; }
+  #cover .cast-row .evi em { color: #d9d1c3; font-style: normal; }
+  #cover .spec { border-top: 1px solid rgba(217,209,195,.08); padding: 46px 0; }
+  #cover .spec-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+  #cover .spec-grid .n { font-size: 30px; font-weight: 700; color: #d9d1c3; }
+  #cover .spec-grid .l { margin-top: 8px; font-size: 12px; letter-spacing: .08em; color: #8a8071; }
+  #cover .cta { border-top: 1px solid rgba(217,209,195,.08); padding: 72px 0 90px; text-align: center; }
+  #cover .cta .big { font-size: clamp(26px, 5vw, 42px); font-weight: 900; line-height: 1.3; }
+  #cover .start-btn { margin-top: 40px; display: inline-flex; align-items: center; gap: 10px; padding: 17px 38px; border: 1px solid rgba(217,209,195,.14); border-radius: 2px; color: #d9d1c3; font-family: inherit; font-size: 16px; letter-spacing: .12em; background: transparent; cursor: pointer; }
+  #cover .start-btn:hover { background: rgba(201,160,106,.08); border-color: rgba(201,160,106,.35); }
+  #cover footer { border-top: 1px solid rgba(217,209,195,.08); padding: 26px 0 40px; font-size: 12px; letter-spacing: .2em; color: #5d5549; text-align: center; }
 </style>
 </head>
 <body>
+<div id="cover">
+  <canvas id="rain"></canvas>
+  <div class="grain"></div>
+  <div class="vignette"></div>
+  <main>
+    <section class="hero">
+      <div class="eyebrow">一个关于「悬空」的文字游戏</div>
+      <h1>岸</h1>
+      <p class="sub">我站到了最后一级台阶，抬头，前面是<em>空的</em>。身边有三个人，三种活法——求稳的，图热闹的，还有死也不肯低头的。</p>
+    </section>
+    <section class="mantra">
+      <div class="q">你拼命想上岸，<br>可岸上，<br>真的有你要的<span class="qmark">东西</span>吗？</div>
+    </section>
+    <section class="cast">
+      <div class="cast-row">
+        <div class="who">沈宁<span class="t">稳</span></div>
+        <div class="evi">审计师，认识很多年。她记得你的口味，床头留一盏灯。可谁都没提过<em>未来</em>。</div>
+      </div>
+      <div class="cast-row">
+        <div class="who">夏晴<span class="t">热</span></div>
+        <div class="evi">会来事儿，对谁都笑。她最怕一个人待着，所以把人缘经营得<em>很好</em>。</div>
+      </div>
+      <div class="cast-row">
+        <div class="who">小安<span class="t">倔</span></div>
+        <div class="evi">钢琴，她弹了二十年。从施坦威到电子琴，她挣来的钱，<em>干净</em>。</div>
+      </div>
+    </section>
+    <section class="spec">
+      <div class="spec-grid">
+        <div><div class="n">18</div><div class="l">个选择</div></div>
+        <div><div class="n">4</div><div class="l">种结局</div></div>
+        <div><div class="n">3</div><div class="l">个人</div></div>
+        <div><div class="n">1</div><div class="l">个问题</div></div>
+      </div>
+    </section>
+    <section class="cta">
+      <div class="big">你会停在<br>谁的身边？</div>
+      <button class="start-btn" id="startBtn">开始游戏</button>
+    </section>
+  </main>
+  <footer>岸 · 一个关于悬空的文字游戏</footer>
+</div>
+
+<div id="game" style="display:none">
 <div class="stage" id="stage"></div>
 <button class="bgm-btn" id="bgmBtn" title="背景音乐">🔇</button>
+</div>
 <script>
 const scores = { 沈宁:0, 夏晴:0, 小安:0 };
 
@@ -376,9 +451,52 @@ function toggleBGM(){
   document.getElementById('bgmBtn').textContent = bgmOn ? '🔊' : '🔇';
 }
 document.getElementById('bgmBtn').addEventListener('click', function(e){ e.stopPropagation(); toggleBGM(); });
-document.addEventListener('click', function once(){ if(!bgmOn) startBGM(); document.removeEventListener('click', once); });
 
-render();
+// 开始游戏：收起封面、显示正文、响起 BGM
+document.getElementById('startBtn').addEventListener('click', function(){
+  document.getElementById('cover').style.display = 'none';
+  document.getElementById('game').style.display = 'block';
+  render();
+  startBGM();
+});
+
+// 封面雨
+(function(){
+  var RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var c = document.getElementById('rain');
+  var ctx = c.getContext('2d');
+  var drops = [], W, H;
+  function size(){
+    W = c.width = window.innerWidth;
+    H = c.height = window.innerHeight;
+    drops = [];
+    var n = Math.floor(W / 9);
+    for (var i = 0; i < n; i++) drops.push(newDrop(true));
+  }
+  function newDrop(any){
+    return { x: Math.random()*W, y: any ? Math.random()*H : -20, len: 8 + Math.random()*16, sp: 1.2 + Math.random()*1.6, o: 0.05 + Math.random()*0.12 };
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    ctx.strokeStyle = '#c9a06a';
+    ctx.lineWidth = 1;
+    for (var i = 0; i < drops.length; i++){
+      var d = drops[i];
+      ctx.globalAlpha = d.o;
+      ctx.beginPath();
+      ctx.moveTo(d.x, d.y);
+      ctx.lineTo(d.x - 0.4, d.y + d.len);
+      ctx.stroke();
+      d.y += d.sp;
+      if (d.y > H + 20) drops[i] = newDrop(false);
+    }
+    ctx.globalAlpha = 1;
+  }
+  size();
+  window.addEventListener('resize', size);
+  if (!RM) { (function loop(){ draw(); requestAnimationFrame(loop); })(); }
+  else { draw(); }
+})();
 </script>
 </body>
 </html>
